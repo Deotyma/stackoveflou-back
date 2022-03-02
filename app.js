@@ -1,19 +1,53 @@
-const express = require("express");
+const express = require('express');
+const app = express();
+const port = 5000;
+const bodyParser = require('body-parser');
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+const cors = require('cors');
+app.use(cors());
+const MongoDBClient = require('./config/db');
+const userRoutes = require('./routes/userRoutes')
+const topicRoutes = require('./routes/topicRoutes');
+
+app.get('/', (req, res, next)=> {
+    res.json({status: 200, msg: "ok"})
+})
+
+userRoutes(app);
+topicRoutes(app)
+
+app.listen(port, ()=>{
+    console.log(`Application exemple à l'écoute sur le port ${port}!`)
+    MongoDBClient.initialize();
+})
+
+/* const express = require("express");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const app = express();
-require("./config/env");
-require ("./config/db");
+require("./config/.env");
+const port = process.env.PORT || 5000;
 
-const port = 8000;
+const { json } = require("body-parser");
+const DBClient = require("./config/db");
+const userRoutes = require('./routes/userRoutes');
+
 
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-const PORT = process.env.PORT || 8000;
 
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}.`);
-  });
+app.get('/', (req, res, next)=> {
+    res.json({status: 200, msg: "ok"})
+})
+
+userRoutes(app);
+
+
+app.listen(port, () => {
+    console.log(`Server is running on port ${port}.`);
+    DBClient.initialize()
+  }); */
   

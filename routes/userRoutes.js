@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
 const saltRound = 10;
 const jwt = require('jsonwebtoken');
-const secret = "arabelikseia";
+const secret = "pititchat";
 
 module.exports = (app)=> {
     const User = require('../models/userModel');
@@ -24,7 +24,7 @@ module.exports = (app)=> {
         res.json({status: 200, result, result})
     })
 
-    app.get('/api/userModel/:id', async (req, res)=> {
+    app.get('/api/user/:id', async (req, res)=> {
         const id = req.params.id;
 
         const user = await User.find({_id: id});
@@ -32,7 +32,7 @@ module.exports = (app)=> {
         res.json({status: 200, user: user[0]})
     })
 
-    app.post('/api/userModel/login', async (req, res)=> {
+    app.post('/api/user/login', async (req, res)=> {
         
         const user = await User.find({email: req.body.email});
 

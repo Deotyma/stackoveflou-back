@@ -1,38 +1,13 @@
-const mongoose = require("mongoose");
-const {Schema} = mongoose;
+const { default: mongoose } = require('mongoose');
+const Mongoose = require('mongoose');
 
-const bcrypt
+const userSchema = new Mongoose.Schema({
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true},
+    nickName: {type: String, required: true},
+    email: {type: String, required: true},
+    password: {type: String, required: true},
+    creationDate: {type: Date, required: true},
+}, {collection: "user"})
 
-const userSchema = new Schema ({
-    firstname: String,
-    lastname:String,
-    nickname:String,
-    email:String,
-    password:{
-        type:String
-    },
-    creationDate: Date
-})
-
-userSchema.pre("save", async function(next){
-    const salt = await bcrypt.getSalt();
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-})
-
-// compare password 
-
-userSchema.statics.login = async function (email, password) {
-    const user = await this.findOne({email});
-    if(user){
-        const auth = await bcrypt.compare(password, user.password);
-        if(auth){
-            return user
-        }
-        throw Error ("incorrect password");
-    }
-    throw Error ("Incorrect email")
-};
-
-const userModel = mongoose.model("users", userSchema);
-module.exports = userModel;
+module.exports = mongoose.model('user', userSchema);
